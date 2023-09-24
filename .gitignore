@@ -1,3 +1,2 @@
 *.sh
-virt
-*.mp4
+__pycache__

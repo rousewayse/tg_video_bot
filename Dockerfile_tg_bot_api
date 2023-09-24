@@ -1,0 +1,22 @@
+FROM archlinux:latest 
+#installing dependencies
+RUN pacman -Sy --noconfirm git cmake gcc openssl zlib gperf make 
+
+#building telegram-bot-api
+WORKDIR /local_bot_api
+RUN git clone --recursive https://github.com/tdlib/telegram-bot-api.git
+RUN mkdir build  
+RUN cd build && cmake -DCMAKE_BUILD_TYPE=Release /local_bot_api/telegram-bot-api
+RUN cd build && cmake --build . 
+RUN rm -rf telegram-bot-api 
+
+#exporting settings
+#ENV TELEGRAM_API_ID=<app_id>
+#ENV TELEGRAM_API_HASH=<api_hash>
+#ENV HTTP_PORT=8081
+#ENV TARGET_DIR=/tg_files
+RUN mkdir ${TARGET_DIR}
+RUN chmod +x build/telegram-bot-api
+#EXPOSE ${HTTP_PORT}
+CMD ["sh", "-c", "./build/telegram-bot-api --local -d ${TARGET_DIR} -p ${HTTP_PORT}"]
+

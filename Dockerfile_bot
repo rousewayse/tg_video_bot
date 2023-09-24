@@ -1,0 +1,17 @@
+FROM python:3.11 
+WORKDIR /app
+ENV VIRTUAL_ENV=/opt/venv
+RUN python -m venv $VIRTUAL_ENV
+
+COPY bot/ ./bot
+
+RUN pip install pipreqs
+RUN pipreqs bot --savepath ./requirements.txt
+RUN pip install -r requirements.txt
+#ENV BOT_API_URL="http://127.0.0.1:8081"
+#ENV API_URL="http://127.0.0.1:8000"
+#ENV BOT_TOKEN="<bot_token>"
+#ENV REDIS_CREDITS="<redis_url>:<redis_port>:<redis_password>"
+CMD ["python", "bot/bot.py"]
+
+
